@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "首頁";
+}
+
+<!-- 熱門行程 -->
+<div id="home">
+    <div>
+        <div class="section section-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="container">
+                <div class="row align-items-center justify-content-between mb-5">
+                    <div class="col-lg-5" data-aos="fade-up">
+                        <h2 class="heading mb-3">推薦行程</h2>
+                        <p></p>
+                    </div>
+                    <div class="col-lg-5 text-md-end" data-aos="fade-up" data-aos-delay="100">
+                        <div id="destination-controls">
+                            <span class="prev me-3" data-controls="prev">
+                                <span class="icon-chevron-left"></span>
+
+                            </span>
+                            <span class="next" data-controls="next">
+                                <span class="icon-chevron-right"></span>
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-slider-wrap">
+                <div class="destination-slider">
+                    <div class="destination" v-for="item in productDTOes" :key="item.fProductId">
+                        <div class="thumb">
+                            <img :src="'/images/' + item.fImagePath" alt="Image" class="img-fluid-small">
+                        </div>
+                        <div class="mt-4">
+                            <span class="meta">{{item.fPeriod}}，NTD$ {{item.fPrice}}</span>
+                            <h3><a :href="'/Product/' + item.fProductId">{{item.fName}}</a></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 所有行程連結按鈕 -->
+    <p class="text-center" data-aos="fade-up" data-aos-delay="200">
+        <a href="/Product" class="btn btn-primary">所有行程</a>
+    </p>
+    <!-- 熱門行程結束 -->
+    <!-- 精選評論 -->
+    <div class="section bg-light">
+        <h2 class="heading mb-5 text-center">精選評論</h2>
+
+        <div class="text-center mb-5">
+            <div id="prevnext-testimonial">
+                <span class="prev me-3" data-controls="prev">
+                    <span class="icon-chevron-left"></span>
+                </span>
+                <span class="next" data-controls="next">
+                    <span class="icon-chevron-right"></span>
+
+                </span>
+            </div>
+        </div>
+
+        <div class="wide-slider-testimonial-wrap">
+            <div class="wide-slider-testimonial">
+                <div class="item" v-for="(item,index) in reviewDTOes" :key="index">
+                    <blockquote class="block-testimonial">
+                        <div class="author">
+                            <h3>{{item.fLastName}}{{item.fFirstName}}</h3>
+                        </div>
+                        <h3 class="name">{{item.fName}}</h3>
+                        <p>{{item.fReviewContent}}</p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.untree_co-section精選評論結束 -->
+@section Scripts{
+    <script>
+        var randomAmount = 20;
+        var vueApp = {
+            data() {
+                return {
+                    productDTOes: "",
+                    reviewDTOes: "",
+                };
+            },
+            methods: {
+                getDatas: async function () {
+                    let _this = this;
+                    await axios.get(`/api/Product/r/${randomAmount}`).then(response => {
+                        _this.productDTOes = response.data;
+                        var productList = [];
+                        for (var i = 0; i < _this.productDTOes.length; i++) {
+                            var item = _this.productDTOes[i];
+                            productList.push(item);
+                        }
+                        _this.productDTOes = productList;
+                    });
+                    await axios.get(`/api/Review`).then(response => {
+                        _this.reviewDTOes = response.data;
+                        var reviewList = [];
+                        for (var i = 0; i < _this.reviewDTOes.length; i++) {
+                            var item = _this.reviewDTOes[i];
+                            reviewList.push(item);
+                        }
+                        _this.reviewDTOes = reviewList;
+                    });
+                    _this.$nextTick(function () {
+                        if (document.getElementById('_render') !== null) {
+                            document.getElementById('_render').remove();
+                        }
+                        var renderScript = document.createElement('script');
+                        renderScript.setAttribute('id', '_render');
+                        renderScript.setAttribute('src', 'Client/js/custom.js');
+                        document.body.appendChild(renderScript);
+                    });
+                },
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getDatas();
+            },
+        };
+        var app = Vue.createApp(vueApp).mount("#home");
+    </script>
+}

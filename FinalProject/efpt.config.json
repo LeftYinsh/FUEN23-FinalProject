@@ -1,0 +1,97 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "FinalProjectContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "FinalProject",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[tCoupon]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tCustomer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tCustomerOrderSheet]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tGender]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tManager]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tOrderDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tPeriod]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tProduct]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tProductReport]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tProductReview]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tProductsTag]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tProvider]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tPurchaseOrderSheet]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tShoppingCart]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tTag]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "B85-G43-GAMING.FinalProject",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

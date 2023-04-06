@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FinalProject.Models.TProductReport>
+
+@{
+	ViewData["Title"] = "List";
+}
+
+
+<main>
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">檢舉查看</h1>
+	</div>
+	<div class="card mb-4">
+		<div class="card-body">
+			<table id="datatablesSimple">
+				<thead>
+		<tr>
+			<th>
+				序
+			</th>
+			<th>
+				訂單編號
+			</th>
+			<th>
+				檢舉內容
+			</th>
+			<th>
+				檢舉時間
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			int count = 0;
+			foreach (var item in Model)
+			{
+				count++;
+				<tr>
+					<td>
+						@count
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FOrderDetailId)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FReportContent)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FCreationDate)
+					</td>
+				</tr>
+			}
+		}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</main>
+

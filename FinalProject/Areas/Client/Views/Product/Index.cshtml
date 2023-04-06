@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "所有行程";
+}
+<div class="section">
+    <div id="page" class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="heading mb-5">所有行程</h2>
+            </div>
+        </div>
+
+        <div class="row align-items-stretch">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-5" v-for="item in productDTOes.slice(pageStart,pageEnd)" :key="item.fProductId" data-aos="fade-up" data-aos-delay=100>
+                <div class="media-entry h-100">
+                    <img :src="'/images/' + item.fImagePath" alt="item.fName" class="img-fluid-small">
+                    <div >
+                        <span class="date">{{item.fPeriod}}</span>
+                        <h3>{{item.fName}}</h3>
+                        <div class="price">NTD$ {{item.fPrice}}
+                        </div>
+                        <p class="mb-0" style="white-space: pre-wrap;">{{item.fDescription}}<br />......</p>
+                    </div>
+                </div>
+                <a :href="'/Product/' + item.fProductId" class="more d-flex align-items-center float-start">
+                    <span class="label">查看更多</span>
+                    <span class="arrow"><span class="icon-keyboard_arrow_right"></span></span>
+                </a>
+            </div>
+        </div>
+        <!-- 分頁 -->
+        <nav class="mt-5" aria-label="Page navigation example" data-aos="fade-up" data-aos-delay="100">
+            <ul class="custom-pagination pagination">
+                <li class="page-item prev">
+                    <a class="page-link" href="#page" @@click="setPage(currentPage-1)">上一頁</a>
+                </li>
+                <li class="page-item" :class="{'active': (currentPage === (n))}" v-for="(n,index) in totalPages" :key="index" @@click="setPage(n)">
+                    <a class="page-link" href="#page">{{n}}</a>
+                </li>
+                <li class="page-item next">
+                    <a class="page-link" href="#page" @@click="setPage(currentPage+1)">下一頁</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var vueApp = {
+            data() {
+                return {
+                    productDTOes: "讀取中",
+                    dataPerPage: 8,
+                    currentPage: 1,
+                };
+            },
+            methods: {
+                getDatas: async function () {
+                    let _this = this;
+                    await axios.get(`/api/Product`).then(response => {
+                        _this.productDTOes = response.data;
+                        var productList = [];
+                        for (var i = 0; i < _this.productDTOes.length; i++) {
+                            var item = _this.productDTOes[i];
+                            productList.push(item);
+                        }
+                        _this.productDTOes = productList;
+                    });
+                    _this.$nextTick(function () {
+                        if (document.getElementById('_render') !== null) {
+                            document.getElementById('_render').remove();
+                        }
+                        var renderScript = document.createElement('script');
+                        renderScript.setAttribute('id', '_render');
+                        renderScript.setAttribute('src', '../Client/js/custom.js');
+                        document.body.appendChild(renderScript);
+                    });
+                },
+                setPage: function (page) {
+                    let _this = this;
+                    if (page <= 0 || page > _this.totalPages) {
+                        return;
+                    }
+                    _this.currentPage = page;
+                    //_this.$router.replace({ path: $route.path, query: { plan: 'private' } });
+                }
+            },
+            computed: {
+                totalPages: function () {
+                    let _this = this;
+                    return Math.ceil(_this.productDTOes.length / _this.dataPerPage)
+                },
+                pageStart: function () {
+                    let _this = this;
+                    return (_this.currentPage - 1) * _this.dataPerPage;
+                },
+                pageEnd: function () {
+                    let _this = this;
+                    return _this.currentPage * _this.dataPerPage;
+                }
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getDatas();
+            },
+        };
+        var app = Vue.createApp(vueApp).mount("#page");
+    </script>
+}

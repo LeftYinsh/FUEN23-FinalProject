@@ -1,0 +1,510 @@
+﻿@using static FinalProject.Models.CGlobalParameters;
+
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Ispan FUEN23 #5">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap5" />
+    <title>@ViewData["Title"] - TripLook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+		href="https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;700&display=swap"
+		rel="stylesheet">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Client/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="~/Client/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="~/Client/css/tiny-slider.css">
+    <link rel="stylesheet" href="~/Client/css/aos.css">
+    <link rel="stylesheet" href="~/Client/css/flatpickr.min.css">
+    <link rel="stylesheet" href="~/Client/css/glightbox.min.css">
+    <link rel="stylesheet" href="~/Client/css/style.css">
+
+    <style>
+        @await RenderSectionAsync("Styles", required: false)
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="site-mobile-menu site-navbar-target">
+			<div class="site-mobile-menu-header">
+				<div class="site-mobile-menu-close">
+					<span class="icofont-close js-menu-toggle"></span>
+				</div>
+			</div>
+			<div class="site-mobile-menu-body"></div>
+		</div>
+
+		@{
+			if (this.ViewContext.HttpContext.Session.Keys.Contains(CDictionaryLogin.SK_LOGINED_CUSTOMER))
+			{
+				<nav class="site-nav mt-3">
+					<div class="container">
+						<div class="site-navigation">
+							<div class="row">
+								<div class="col-6 col-lg-3">
+									<a href="/" class="logo m-0 float-start">TripLook</a>
+								</div>
+								<div class="col-lg-6 d-none d-lg-inline-block text-center nav-center-wrap">
+									<ul class="js-clone-nav  text-center site-menu p-0 m-0">
+										<li><a href="/">首頁</a></li>
+										<li class="has-children">
+											<a href="/Product">行程</a>
+											<ul class="dropdown">
+												<li><a href="/Product">所有行程</a></li>
+												<li><a href="/ProductSet">套裝行程</a></li>
+											</ul>
+										</li>
+										<li><a href="/ShoppingCart">購物車</a></li>
+										<li><a href="/OrderDetail">查看訂單</a></li>
+										<li><a href="/Customer">會員中心</a></li>
+									</ul>
+								</div>
+								<div class="text-lg-end">
+									<div class="" style="font-size:17px">
+										會員：@FetchCustomerFirstName(this.ViewContext.HttpContext)
+									</div>
+									<ul class="js-clone-nav d-none d-lg-inline-block text-end site-menu ">
+										<li class="cta-button">
+											<a href="/Logout">登出</a>
+										</li>
+									</ul>
+									
+
+									<a href="#"
+							   	class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block d-lg-none light"
+							   	data-toggle="collapse" data-target="#main-navbar">
+										<span></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</nav>
+			}
+			else if (!this.ViewContext.HttpContext.Session.Keys.Contains(CDictionaryLogin.SK_LOGINED_CUSTOMER))
+			{
+
+				<div id="loginApp">
+					<nav class="site-nav mt-3">
+						<div class="container">
+							<div class="site-navigation">
+								<div class="row">
+									<div class="col-6 col-lg-3">
+										<a href="/" class="logo m-0 float-start">TripLook</a>
+									</div>
+									<div class="col-lg-6 d-none d-lg-inline-block text-center nav-center-wrap">
+										<ul class="js-clone-nav  text-center site-menu p-0 m-0">
+											<li><a href="/">首頁</a></li>
+											<li class="has-children">
+												<a href="/Product">行程</a>
+												<ul class="dropdown">
+													<li><a href="/Product">所有行程</a></li>
+													<li><a href="/ProductSet">套裝行程</a></li>
+												</ul>
+											</li>
+											<li><a href="/ShoppingCart">購物車</a></li>
+											<li><a href="/OrderDetail">查看訂單</a></li>
+											<li><a href="/Customer">會員中心</a></li>
+										</ul>
+									</div>
+
+
+
+									<div class="text-lg-end">
+										<ul class="js-clone-nav d-none d-lg-inline-block text-end site-menu ">
+											<li class="cta-button">
+												<a type="button" @@click="showModal">登入</a>
+											</li>
+										</ul>
+										<ul class="js-clone-nav d-none d-lg-inline-block text-end site-menu ">
+											<li class="cta-button">
+												<a type="button" @@click="showloginModal">註冊</a>
+											</li>
+										</ul>
+
+										<a href="#"
+								   	class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block d-lg-none light"
+								   	data-toggle="collapse" data-target="#main-navbar">
+											<span></span>
+										</a>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</nav>
+
+					<div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+				 	role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg-40%" role="document">
+							<div class="modal-content" style="border-radius:25px">
+								<div class="modal-header" style="background-color:#2c628c">
+									<h5 class="modal-title" id="modalTitleId" style="color:aliceblue">TripLook會員註冊</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="height:300px;overflow:auto;">
+									<div class="form-group ms-5">
+										<label class="form-label">姓氏</label>
+										<small class="text-danger">*</small>
+										<input class="form-control" v-model="fLastName" style="border-radius:10px;width:300px" />
+									</div>
+									<br />
+									<div class="form-group ms-5">
+										<label class="form-label">名字</label>
+										<small class="text-danger">*</small>
+										<input class="form-control" v-model="fFirstName" style="border-radius:10px;width:300px" />
+									</div>
+									<br />
+									<div class="form-group ms-5">
+										<label class="form-label">性別</label>
+										<small class="text-danger">*</small>
+										<select name="" id="select" class="form-control" v-model.number="fGender" style="border-radius:10px;width:300px">
+											<option value=0>未指定</option>
+											<option value=1>男性</option>
+											<option value=2>女性</option>
+										</select>
+									</div>
+									<br />
+									<div class="form-group ms-5">
+										<label class="form-label">電話號碼</label>
+										<small class="text-danger">*</small>
+										<input class="form-control" v-model="fTel" style="border-radius:10px;width:300px" @@keyup="checkTel" />
+										<span id="istel"></span>
+									</div>
+									<br />
+									<div class="form-group ms-5">
+										<label class="form-label">手機號碼</label>
+										<small class="text-danger">*</small>
+										<input class="form-control" v-model="fMobile" style="border-radius:10px;width:300px" />
+									</div>
+									<br />
+									<div class="form-group ms-5">
+										<label class="form-label">Email電子郵件</label>
+										<small class="text-danger">*</small>
+										<input class="form-control" v-model="fEmail" style="border-radius:10px;width:300px" />
+									</div>
+									<br />
+									<div class="form-group ms-5">
+										<label class="form-label">密碼</label>
+										<small class="text-danger">*</small>
+										<input class="form-control" v-model="fPassword" style="border-radius:10px;width:300px" />
+									</div>
+									<br />
+									<div class="form-group ms-5">
+										<label class="form-label">生日</label>
+										<small class="text-danger">*</small>
+										<input type="date" class="form-control" v-model="fNewbirthdate" style="border-radius:10px;width:300px" />
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-success " data-bs-dismiss="modal">關閉</button>
+									<button type="button" class="btn btn-primary" @@click="insert" id="ck">註冊</button>
+									<button type="button" class="btn btn-primary btn-sm" @@click="demo">Demo</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+				 	role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document"
+					 	style="width:auto">
+							<div class="modal-content" style="border-radius:25px">
+								<div class="modal-header" style="background-color:#2c628c">
+									<h5 class="modal-title" id="modalTitleId" style="color:aliceblue">TripLook會員登入</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<div class="form-group">
+										<label class="form-label">帳號(電子郵件)</label>
+										<input class="form-control" style="border-radius:10px" v-model="email" autocomplete="off" />
+									</div>
+									<div class="form-group">
+										<label class="form-label">密碼</label>
+										<input class="form-control" type="password" style="border-radius:10px" v-model="password" autocomplete="off" />
+									</div>
+									
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-success" data-bs-dismiss="modal">關閉</button>
+									<button type="button" class="btn btn-primary" @@click="signin">登入</button>
+								</div>
+								<span id="result"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		}
+
+		<div class="hero overlay">
+
+			<div class="img-bg rellax">
+				<img src="~/images/hero_1.jpg" alt="Image" class="img-fluid">
+			</div>
+
+			<div class="container">
+				<div class="row align-items-center justify-content-start">
+					<div class="col-lg-5">
+
+						<h1 class="heading" data-aos="fade-up">簡單，就出發</h1>
+						<p class="mb-5" data-aos="fade-up">你可以在這個網站，輕易找到符合需求的行程。</p>
+
+						<div data-aos="fade-up">
+							<a href="https://www.youtube.com/watch?v=5n-e6lOhVq0"
+								class="play-button align-items-center d-flex glightbox3">
+								<span class="icon-button me-3">
+									<span class="icon-play"></span>
+								</span>
+								<span class="caption">觀看影片</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    <footer>
+        <div class="py-5 bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 text-center mb-3 mb-lg-0 text-lg-start">
+                    <h3 class="text-white m-0">歡迎使用我們的網站</h3>
+                </div>
+                <div class="col-lg-5 text-center text-lg-end">
+                    <a href="#" class="btn btn-outline-white">馬上開始</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-footer">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h3>關於我們<span class="text-primary"></span> </h3>
+                        <p>致力於在傳統包團旅遊與自由行間，發展出富有彈性且自由，又能深度探索的旅程。</p>
+                    </div> <!-- /.widget -->
+                    <div class="widget">
+
+                        <ul class="list-unstyled social">
+                            <li><a href="#"><span class="icon-instagram"></span></a></li>
+                            <li><a href="#"><span class="icon-twitter"></span></a></li>
+                            <li><a href="#"><span class="icon-facebook"></span></a></li>
+                            <li><a href="#"><span class="icon-linkedin"></span></a></li>
+                            <li><a href="#"><span class="icon-pinterest"></span></a></li>
+                            <li><a href="#"><span class="icon-dribbble"></span></a></li>
+                        </ul>
+                    </div> <!-- /.widget -->
+                </div> <!-- /.col-lg-3 -->
+
+
+                <div class="col-lg-2 ml-auto">
+                    <div class="widget">
+                        <h3>合作夥伴</h3>
+                        <ul class="list-unstyled float-left links">
+                            <li><a asp-area="Server" asp-controller="Home" asp-action="Index">供應商 / 管理員登入</a></li>
+                           
+                        </ul>
+                    </div> <!-- /.widget -->
+                </div> <!-- /.col-lg-3 -->
+
+                <div class="col-lg-2">
+                    <div class="widget">
+                        <h3>服務條款</h3>
+                        <ul class="list-unstyled float-left links">
+                            <li><a href="#">服務條款</a></li>
+                            <li><a href="#">隱私權政策</a></li>
+                        </ul>
+                    </div> <!-- /.widget -->
+                </div> <!-- /.col-lg-3 -->
+                
+
+                <div class="col-lg-3">
+                    <div class="widget">
+                        <h3>連絡我們</h3>
+
+                        <ul class="list-unstyled links mb-4">
+                            <li><a href="mailto:info@mydomain.com">admin@example.com</a></li>
+                            <li><a href="tel://11234567890">+886 900 000 000</a></li>
+                            <li class="address"><a href="#">台南 台灣</a></li>
+
+                        </ul>
+                    </div> <!-- /.widget -->
+                </div> <!-- /.col-lg-3 -->
+
+            </div> <!-- /.row -->
+
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <p class="mb-0">Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> . TripLook
+                        本網站僅供專題作業使用，無任何商業行為，若有任何疑問，請連絡告知我們
+                    </p>
+                </div>
+            </div> <!-- /.container -->
+        </div> <!-- /.site-footer -->
+    </div>
+    <!-- Preloader -->
+        <div id="overlayer"></div>
+        <div class="loader">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <script src="~/Client/js/vue.global.min.js"></script>
+        <script src="~/Client/js/axios.min.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/Client/js/bootstrap.bundle.min.js"></script>
+        <script src="~/Client/js/tiny-slider.js"></script>
+        <script src="~/Client/js/aos.js"></script>
+        <script src="~/Client/js/navbar.js"></script>
+        <script src="~/Client/js/counter.js"></script>
+        <script src="~/Client/js/rellax.js"></script>
+        <script src="~/Client/js/flatpickr.js"></script>
+        <script src="~/Client/js/glightbox.min.js"></script>
+			<script src="https://kit.fontawesome.com/4deb42890b.js" crossorigin="anonymous"></script>
+
+		<script>
+			var vueApp = {
+				data() {
+					return {
+						fId: null, //新增要用
+						fFirstName: null,  //繫節
+						fLastName: null,
+						fTel: null,
+						fMobile: null,
+						fEmail: null,
+						fPassword: null,
+						fGender: null,
+						fNewbirthdate: null,
+
+						location: null,
+
+						email: null,
+						password: null,
+					};
+				},
+				methods: {
+					showModal: function () {
+						//alert("showModal")
+						$("#insertModal").modal("show");
+					},
+					showloginModal: function () {
+						$("#loginModal").modal("show");
+					},
+					signin: async function () {
+						let _this = this;
+						var p = {
+							txtAccount: _this.email,
+							txtPassword: _this.password,
+						}
+						await axios.post(`/api/Customer`, p).then(response => {
+							alert(response.data);
+							if (response.data == "登入成功！") {
+								window.location = "/";
+								};														
+						}).catch(error => {
+							alert("登入失敗，請檢查帳號是否正確");
+						});
+						_this.email = null;
+						_this.password = null;
+					},
+					insert: function () {
+						let _this = this;
+						var p = {
+							FId: 0,
+							FFirstName: _this.fFirstName,
+							FLastName: _this.fLastName,
+							FGender: _this.fGender,
+							FTel: _this.fTel,
+							FMobile: _this.fMobile,
+							FEmail: _this.fEmail,
+							FPassword: _this.fPassword,
+							FNewBirthDate: new Date(_this.fNewbirthdate),
+							FBirthDate: "",
+							FPoint: 0,
+						};
+						axios.post(`/api/Customer/new`, p).then(response => {
+							alert(response.data);
+							window.location = "/";
+						}).catch(err =>{
+							alert("請輸入正確資料");
+						});
+					},
+					demo: function (){
+						//alert("ll")
+						let _this = this;
+						_this.fFirstName= "小王";
+						_this.fLastName= "陳";
+						_this.fTel=  "062874458";
+						_this.fMobile=  "0936554145";
+						_this.fEmail= "fsad11@gmail.com";
+						_this.fPassword= "SAdd20";
+						_this.fGender= "0";
+					},
+					checkTel: function (){
+						//alert("ss");
+						let _this = this;
+						let telVal = _this.fTel;
+						let telLen = _this.fTel.length;
+						let sp = document.getElementById("istel");
+
+						let ch, ck, flag1 = false, flag2 = false;
+						if (telLen <= 0) {
+							sp.innerText = "不可為空白";
+							sp.style.color = "red";
+							$("#ck").prop("disabled", true);
+						}
+						else if (telLen >= 9 && telLen <= 10) {
+							for (let i = 0; i < telLen; i++) {
+								ch = telVal.charAt(i);
+								ck = telVal.substr(0, 1);
+								if (ch >= "0" && ch <= "9")
+									flag1 = true;
+								if (ck == "0")
+									flag2 = true;
+								if (flag1 && flag2) break;
+							}
+							if (flag1 && flag2) {
+								sp.innerText = "";
+								$("#ck").prop("disabled", false);
+							}
+						}
+						else {
+							sp.innerText = "需要0開頭的九或十碼";
+							sp.style.color = "red";
+							$("#ck").prop("disabled", true);
+						}
+
+					},
+				},
+				mounted: function () {
+					let _this = this;
+					_this.location = window.location.pathname;
+				}
+			};
+			var app = Vue.createApp(vueApp).mount("#loginApp");
+		</script>
+
+        @await RenderSectionAsync("Scripts", required: false)      
+</body>
+
+</html>

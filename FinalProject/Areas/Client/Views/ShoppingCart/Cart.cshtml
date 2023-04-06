@@ -1,0 +1,361 @@
+﻿@using static FinalProject.Models.CGlobalParameters;
+
+@section Styles
+    {
+    <style>
+        /*購物車*/
+        a {
+            cursor: pointer;
+        }
+
+        .form-control {
+            border-radius: 10px
+        }
+
+        .sale {
+            opacity: 0.5;
+        }
+
+    </style>
+}
+
+<div class="section">
+    <div class="container" id="cart">
+        <h3 class="mt-3 mb-4">購物車</h3>
+        <!-- 購物車 -->
+        <div class="mt-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="border-0">商品預覽</th>
+                        <th scope="col" class="border-0 ">商品名稱</th>
+                        <th scope="col" class="border-0 ">日期</th>
+                        <th scope="col" class="border-0">時段</th>
+                        <th scope="col" class="border-0">價格/人</th>
+                        <th scope="col" class="border-0">人數</th>
+                        <th scope="col" class="border-0">總價</th>
+                        <th scope="col" class="border-0">刪除</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="border-bottom border-top" v-for="item in CartDTOes" :key="item.fProductId">
+                        <td scope="row" class="border-0 px-0 font-weight-normal py-4">
+                            <img :src="'@Url.Content("~/images/")' + item.fImagePath" alt="Image" class="img-fluid-shop">
+                        </td>
+                        <!-- 商品名 -->
+                        <td class=" align-middle">
+                            <p class="mb-0 ms-auto">{{item.fName}}</p>
+                        </td>
+
+                        <td class=" align-middle">
+                            <p class="mb-0 ms-auto">{{item.fTravelDate}}</p>
+                        </td>
+                        <td class=" align-middle">
+                            <p class="mb-0 ms-auto">{{item.fPeriod}}</p>
+                        </td>
+                        <td class=" align-middle">
+                            <p class="mb-0 ms-auto">{{item.fPrice}}</p>
+                        </td>
+
+                        <td class=" align-middle">
+                            <p class="mb-0 ms-auto">{{item.fPurchaseQuantity}}</p>
+                        </td>
+
+                        <td class=" align-middle">
+                            <p class="mb-0 ms-auto">{{item.fPrice*item.fPurchaseQuantity}}</p>
+                        </td>
+                        <!-- 刪除 -->
+                        <td class="align-middle">
+                            <a class="fas fa-times" @@click="deleteData(item)"></a>
+                        </td>
+                        @*直接下手指 css 在 Client 的 css style(購物車)*@
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        @*下方*@
+        <div class="row justify-content-around" id="customer">
+            @*<!-- 折價券 -->
+            <div class="input-group w-50 mb-3">
+            <div class="form-group ">
+            <select class="form-control rounded-0 border-bottom border-0 ">
+            <option value=0>請選擇優惠券</option>
+            <option value=1>triplook23</option>
+            <option value=2>triplook50</option>
+            </select>
+            </div>
+            <button type="button" class="btn btn-primary  text-white">確定</button>
+            </div>*@
+
+
+
+            <!-- 帳單細節 -->
+            <div class="col-md-6">
+                <div class="border p-4 mb-4">
+                    <h4 class="fw-bold mb-4">會員資料</h4>
+                    <div class="form-group">
+                        <label for="username">
+                            姓氏
+                        </label>
+                        <input class="form-control" v-model="customerDTOes.fLastName" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">
+                            名字
+                        </label>
+                        <input class="form-control" v-model="customerDTOes.fFirstName" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">
+                            家用電話
+                        </label>
+                        <input class="form-control" v-model="customerDTOes.fTel" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">
+                            手機
+                        </label>
+                        <input class="form-control" v-model="customerDTOes.fMobile" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">
+                            信箱
+                        </label>
+                        <input class="form-control" v-model="customerDTOes.fEmail" disabled>
+                    </div>
+                </div>
+            </div>
+
+
+            @*訂單*@
+            <div class="col-md-4 " id="coupon">
+                <div class="border p-4 mb-4">
+                    <h4 class="fw-bold mb-4">帳單明細</h4>
+                    <table class="table border-bottom">
+                        <tbody>
+                            <tr>
+                                <th scope="row"
+                                    class="border-0 px-0 pt-4 font-weight-normal">
+                                    總價
+                                </th>
+                                <td class="text-end border-0 px-0 pt-4">NT$ {{fTotalPrice}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row"
+                                    class="border-0 px-0 pt-4 font-weight-normal">
+                                    優惠方式
+                                </th>
+                                <td class="text-end border-0 px-0 pt-4 ">
+                                    <select class=" rounded-0 border-bottom border-0 " v-model.number="couponType">
+                                        <option value=0>請選擇</option>
+                                        <option value=1>優惠券</option>
+                                        <option value=2>會員點數</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="{'sale':(couponType==2)}">
+                                <th scope="row"
+                                    class="border-0 px-0  ">
+                                    優惠券
+                                </th>
+                                <td class="text-end border-0 px-0 ">
+                                    <select class=" rounded-0 border-bottom border-0" v-model.number="ratio" :disabled="couponType==2">
+
+                                        <option v-for="item in couponDTOes" :value="item.fRatio" :key="item.fCode">{{item.fCode}}</option>
+                                    </select>
+
+                                    @*<div>選擇的優惠{{selectCoupon}}</div>*@
+                                </td>
+                            </tr>
+                            <tr :class="{'sale':(couponType==1)}">
+                                <th scope="row"
+                                    class="border-0 px-0 pt-0">
+                                    會員點數
+                                </th>
+                                <td class="text-end border-0 px-0 pt-0">現有點數：{{customerDTOes.fPoint}}</td>
+                            </tr>
+                            <tr :class="{'sale':(couponType==1)}">
+                                <th scope="row"
+                                    class="border-0 px-0 pt-0">
+                                    使用點數
+                                </th>
+                                <td class="row border-0 px-0 pt-0 justify-content-end">
+                                    <div class="form-group col-12 col-sm-6 col-md-3 ">
+                                        <input :disabled="couponType==1" class="form-control text-end" v-model.number="customerPoint">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr :class="{'sale':(couponType==2)}">
+                                <th scope="row"
+                                    class="border-0 px-0 pt-4">
+                                    折扣幅度
+                                </th>
+                                <td class="text-end border-0 px-0 pt-4">{{ratio}} % </td>
+
+                            </tr>
+                            <tr>
+                                <th scope="row"
+                                    class="px-0 pt-0 ">
+                                    折扣金額
+                                </th>
+                                <td class="text-end border-0 px-0 pt-0" v-if="couponType==1">- {{fTotalPrice* (100-ratio)/100}}</td>
+                                <td class="text-end border-0 px-0 pt-0" v-else-if="couponType==2">- {{customerPoint}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between mt-4">
+                        <p class="mb-0 h4 fw-bold">總計</p>
+                        <p class="mb-0 h4 fw-bold" v-if="couponType==1">NT$ {{fTotalPrice-fTotalPrice* (100-ratio)/100}}</p>
+                        <p class="mb-0 h4 fw-bold" v-else-if="couponType==2">NT$ {{fTotalPrice-customerPoint}}</p>
+                    </div>
+                    <input type="submit" value="確定結帳" class="btn btn-primary  w-100 mt-4" @@click="addOrder" :disabled="(postActive == 1)">
+                    @*<button type="button" class="btn btn-primary  w-100 mt-4" @@click="addOrder" :disabled="(postActive == 1)">確定結帳</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Client/js/vue.global.min.js"></script>
+    <script src="~/Client/js/axios.min.js"></script>
+    <script>
+        var vueApp = {
+            data() {
+                return {
+                    CartDTOes: "讀取中",
+                    couponType: 0,
+                    ratio: 100,
+                    customerPoint: null,
+                    postActive: 0,
+
+
+                    fProductId: null,
+                    fName: null,
+                    fTravelDate: null,
+                    fPeriod: null,
+                    fPurchaseQuantity: null,
+                    fPrice: null,
+                    fImagePath: null,
+                    fTotalPrice: 0,
+
+                    couponDTOes: "讀取中",
+                    fSid: null,
+                    fCode: null,
+                    fStartDate: null,
+                    fEndDate: null,
+                    fRatio: null,
+                    fAvailableTimes: null,
+                    fUsedTimes: null,
+
+                    fId: null,
+                    fCustomerId: null,
+                    fCouponCode: null,
+                    fCreationDate: null,
+                    fCheckedDate: null,
+                    fOrderSheetCancel: null,
+
+                    customerDTOes: "讀取中",
+                    fId: null,
+                    ffirstName: null,
+                    flastName: null,
+                    ftel: null,
+                    fmobile: null,
+                    femail: null,
+                    fpassword: null,
+                    fgender: 0,
+                    fbirthdate: null,
+                    fpoint: null,
+                };
+            },
+            methods: {
+                getDatas: async function () {
+                    let _this = this;
+                    await axios.get(`/api/ShoppingCart/`).then(response => {
+                        _this.CartDTOes = response.data;
+                        var cartList = [];
+                        _this.fTotalPrice = 0;
+                        for (var i = 0; i < _this.CartDTOes.length; i++) {
+                            var item = _this.CartDTOes[i];
+                            _this.fTotalPrice += item.fPrice * item.fPurchaseQuantity;
+                            cartList.push(item);
+                        }
+                        _this.cartDTOes = cartList;
+                    });
+                    await axios.get('/api/Coupon').then(response => {
+                        _this.couponDTOes = response.data;
+                        var couponList = [];
+                        for (var i = 0; i < _this.couponDTOes.length; i++) {
+                            var item = _this.couponDTOes[i];
+                            couponList.push(item);
+                        }
+                        _this.couponDTOes = couponList;
+                    });
+                    await axios.get(`/api/Customer/${@FetchCustomerId(this.ViewContext.HttpContext)}`).then(response => {
+                        _this.customerDTOes = response.data;
+                    });
+                    _this.$nextTick(function () {
+                        if (document.getElementById('_render') !== null) {
+                            document.getElementById('_render').remove();
+                        }
+                        var renderScript = document.createElement('script');
+                        renderScript.setAttribute('id', '_render');
+                        renderScript.setAttribute('src', '../Client/js/custom.js');
+                        document.body.appendChild(renderScript);
+                    });
+                },
+                addOrder: async function () {
+                    let _this = this;
+                    var p = {
+                        FId: 0,
+                        FCustomerId: @FetchCustomerId(this.ViewContext.HttpContext),
+                        FCouponCode: _this.fCode,
+                        FCreationDate: new Date(),
+                        FCheckedDate: new Date(),
+                        FOrderSheetCancel: false,
+                    };
+                    _this.postActive = 1;
+                    await axios.post(`/api/AddOrderSheet`, p).then(response => {
+                        alert(response.data);
+                        _this.postActive = 0;
+                    }).catch(function (error) {
+                        _this.postActive = 0;
+                    });
+                },
+                deleteData: function (item) {
+                    let _this = this;
+                    var ret = confirm(`確定將以下商品移出購物車嗎？\n\n「${item.fName}」`);
+                    if (ret == true) {
+                        var p = {
+                            FSid: item.fSid,
+                        };
+                        axios.delete(`/api/ShoppingCart`, { data: p }).then(response => {
+                            alert(response.data);
+                            axios.get(`/api/ShoppingCart/`).then(response => {
+                                _this.CartDTOes = response.data;
+                                var cartList = [];
+                                _this.fTotalPrice = 0;
+                                for (var i = 0; i < _this.CartDTOes.length; i++) {
+                                    var item = _this.CartDTOes[i];
+                                    _this.fTotalPrice += item.fPrice * item.fPurchaseQuantity;
+                                    cartList.push(item);
+                                }
+                                _this.cartDTOes = cartList;
+                            });
+                        });                       
+                    }
+                },
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getDatas();
+            },
+        };
+        var app = Vue.createApp(vueApp).mount("#cart");
+    </script>
+}
+
+

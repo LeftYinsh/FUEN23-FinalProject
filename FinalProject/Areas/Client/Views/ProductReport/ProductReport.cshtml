@@ -1,0 +1,101 @@
+﻿<div class="section">
+    <div id="report" class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="heading mb-5">檢舉</h3>
+            </div>
+        </div>
+
+
+
+        <div class="bg-light" v-for="item in ProductReportDTOes" :key="item.fId">
+            <ul class="comment-list">
+                <li class="comment">
+                    <div class="comment-body">
+                        <h3>{{item.fLastName}} {{item.fFirstName}}</h3>
+                        <div class="meta">{{item.fCreationDate}}</div>
+                        <p>{{item.fReportContent}}</p>
+                    </div>
+                </li>
+            </ul>
+
+
+           
+
+        </div>
+        <div class="comment-form-wrap pt-5">
+            <h3 class="mb-5">撰寫檢舉</h3>
+            <form action="#" class="">
+                <div class="mb-3">
+                    <label for="name">訂單編號</label>
+                    <input type="text" class="form-control" v-model.number="fOrderDetailId">
+                </div>
+                <div class="mb-3">
+                    <label for="message">檢舉內容</label>
+                    <textarea cols="30" rows="10" class="form-control" v-model="fReportContent"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary btn-md text-white" @@click="insert">確定送出</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/Client/js/vue.global.min.js"></script>
+    <script src="~/Client/js/axios.min.js"></script>
+    <script>
+        var testID = 5;
+        var vueApp = {
+            data() {
+                return {
+                    ProductReportDTOes: [],
+                    fId: null,
+                    fOrderDetailId: null,               
+                    fReportContent: null,
+                    fCreationDate: null,
+                    fFirstName: null,
+                    fLastName: null,
+                };
+            },
+            methods: {
+                details: function () {
+                    let _this = this;
+                    axios.get(`/api/Report/${testID}`).then(response => {
+                        _this.ProductReportDTOes = response.data;
+                        var reportList = [];
+                        for (var i = 0; i < _this.ProductReportDTOes.length; i++) {
+                            var item = _this.ProductReportDTOes[i];
+                            reportList.push(item);
+                        }
+                        _this.ProductReportDTOes = reportList;
+                    });
+                },
+                insert: function () {
+                    alert("insert");
+                    let _this = this;
+                    var p = {
+                        FId: 0,
+                        FOrderDetailId: _this.fOrderDetailId,         
+                        FCreationDate: new Date(),
+                        FReportContent: _this.fReportContent,
+                        FLastName: "",
+                        FFirstName: "",
+                    };
+                    axios.post(`/api/Report`, p).then(response => {
+                        alert(response.data);
+                    });
+                },
+            },
+            mounted: function () {
+                let _this = this;
+                _this.details();
+            },
+        };
+        var app = Vue.createApp(vueApp).mount("#report");
+    </script>
+}

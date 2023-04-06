@@ -1,0 +1,93 @@
+﻿@model FinalProject.Areas.Server.ViewModels.CCustomerViewModel
+
+@{
+    ViewData["Title"] = "修改會員資料";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">
+        修改會員資料
+    </h1>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row ms-2">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="FCustomerId" value="@Model.FCustomerId" />
+                    <div class="form-group">
+                        <label asp-for="FLastName" class="control-label"></label>
+                        <input asp-for="FLastName" class="form-control" />
+                        <span asp-validation-for="FLastName" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FFirstName" class="control-label"></label>
+                        <input asp-for="FFirstName" class="form-control" />
+                        <span asp-validation-for="FFirstName" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FTel" class="control-label"></label>
+                        <input asp-for="FTel" class="form-control" />
+                        <span asp-validation-for="FTel" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FMobile" class="control-label"></label>
+                        <input asp-for="FMobile" class="form-control" />
+                        <span asp-validation-for="FMobile" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FEmail" class="control-label"></label>
+                        <input asp-for="FEmail" class="form-control" />
+                        <span asp-validation-for="FEmail" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FPassword" class="control-label"></label>
+                        <input asp-for="FPassword" class="form-control" />
+                        <span asp-validation-for="FPassword" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FBirthDate" class="control-label"></label>
+                        <input asp-for="FBirthDate" class="form-control" />
+                        <span asp-validation-for="FBirthDate" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FPoint" class="control-label"></label>
+                        <input asp-for="FPoint" class="form-control" />
+                        <span asp-validation-for="FPoint" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="FBlackList" /> @Html.DisplayNameFor(model => model.FBlackList)
+                        </label>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FRemark" class="control-label"></label>
+                        <textarea asp-for="FRemark" class="form-control" style="white-space:pre" rows="10"></textarea>
+                        <span asp-validation-for="FRemark" class="text-danger"></span>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input type="submit" value="儲存" class="btn btn-success" />
+                        <a class="btn btn-danger" asp-action="List">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

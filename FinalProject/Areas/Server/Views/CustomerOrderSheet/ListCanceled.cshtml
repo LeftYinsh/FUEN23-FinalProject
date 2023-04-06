@@ -1,0 +1,60 @@
+﻿@model IEnumerable<FinalProject.Areas.Server.ViewModels.CCustomerOrderSheetViewModel>
+
+@{
+    ViewData["Title"] = "List_Canceled";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">已取消訂單</h1>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <table id="datatablesSimple">
+    <thead>
+        <tr>            
+            <th>
+                @Html.DisplayNameFor(model => model.OrderLastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderFirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CouponCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>            
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CouponCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckedDate)
+            </td>
+            <td>
+                @Html.ActionLink("詳細", "DetailsCanceled", new { id = item.CustomerOrderSheetId }, new { @class = "btn btn-secondary" })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+    </div>
+</div>

@@ -1,0 +1,277 @@
+﻿@using static FinalProject.Models.CGlobalParameters;
+
+@section Styles
+	{
+        /*查看訂單*/
+        a {
+            cursor: pointer;
+        }
+
+        .form-control {
+            border-radius: 10px
+        }
+}
+<div class="section">
+	<div class="container" id="app">
+		<h3 class="mt-3 mb-4">查看訂單</h3>
+		<!-- 查看訂單 -->
+		<div class="mt-3">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col" class="border-0">商品預覽</th>
+						<th scope="col" class="border-0 ">商品名稱</th>
+						<th scope="col" class="border-0 ">日期</th>
+						<th scope="col" class="border-0">時段</th>
+						<th scope="col" class="border-0">價格/人</th>
+						<th scope="col" class="border-0">人數</th>
+						<th scope="col" class="border-0">折價券</th>
+						<th scope="col" class="border-0">總價</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr class="border-bottom border-top" v-for="item in ODetailDTOes" :key="item.fProductId" v-model.number="item.fId" :value="item.fProductId">
+						<td scope="row" class="border-0 px-0 font-weight-normal py-4">
+							<img :src="'@Url.Content("~/images/")' + item.fImagePath" alt="Image" class="img-fluid-shop">
+						</td>
+						<!-- 商品名 -->
+						<td class=" align-middle">
+
+							<p class="mb-0 ms-auto">{{item.fName}}{{item.fId}}</p>
+						</td>
+
+						<td class=" align-middle">
+							<p class="mb-0 ms-auto">{{item.fTravelDate}}</p>
+						</td>
+						<td class=" align-middle">
+							<p class="mb-0 ms-auto">{{item.fPeriod}}</p>
+						</td>
+						<td class=" align-middle">
+							<p class="mb-0 ms-auto">{{item.fPrice}}</p>
+						</td>
+
+						<td class=" align-middle">
+							<p class="mb-0 ms-auto">{{item.fPurchaseQuantity}}</p>
+						</td>
+
+						<td class=" align-middle">
+							<p class="mb-0 ms-auto">{{item.fCouponCode}}</p>
+						</td>
+
+						<td class=" align-middle">
+							<p class="mb-0 ms-auto">{{item.fPrice*item.fPurchaseQuantity}}</p>
+						</td>
+						@*直接下手指 css 在 Client 的 css style(購物車)*@
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="row d-flex justify-content-end">
+			<div class="col-2 d-flex justify-content-end">
+			<button type="button" class="btn btn-primary btn-md text-white" @@click="writeReview">撰寫評論</button>
+		</div>
+		<div class="col-2">
+			<button type="button" class="btn btn-primary btn-md text-white" @@click="writeReport">撰寫檢舉</button>
+		</div>
+		</div>
+
+		<div class="modal fade" id="insertReviewId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+			 role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document"
+				 style="width:auto">
+				<div class="modal-content" style="border-radius:25px">
+					<div class="modal-header" style="background-color:#2c628c">
+						<h5 class="modal-title" id="modalTitleId" style="color:aliceblue">撰寫評論</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="comment-form-wrap  ">
+							<form action="#" class="">
+								<div class="mb-3">
+									<label for="name">訂單編號</label>
+									<select class=" form-control custom-select" v-model.number="fId">
+										<option v-for="item in ODetailDTOes" :value="item.fId" :key="item.fId">{{item.fId}}</option>
+									</select>
+								</div>
+								<div class="mb-3">
+									<label for="name">商品編號</label>
+									<select class=" form-control custom-select" v-model.number="fProductId">
+										<option v-for="item in ODetailDTOes" :value="item.fProductId" :key="item.fProductId">{{item.fName}}</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
+									<label for="message">分數</label>
+									<select class="form-control custom-select" v-model.number="fScore">
+										<option value=1>1</option>
+										<option value=2>2</option>
+										<option value=3>3</option>
+										<option value=4>4</option>
+										<option value=5>5</option>
+									</select>
+								</div>
+								<div class="mb-3">
+									<label for="message">評論內容</label>
+									<textarea cols="30" rows="10" class="form-control" v-model="fReviewContent"></textarea>
+								</div>
+
+							</form>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="mb-3">
+							<button type="button" class="btn btn-primary btn-md text-white" @@click="insertReview">送出評論</button>
+						</div>
+					</div>
+					<span id="result"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="insertReportId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+			 role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document"
+				 style="width:auto">
+				<div class="modal-content" style="border-radius:25px">
+					<div class="modal-header" style="background-color:#2c628c">
+						<h5 class="modal-title" id="modalTitleId" style="color:aliceblue">撰寫檢舉</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="comment-form-wrap ">
+							<form action="#" class="">
+
+								<div class="mb-3">
+									<label for="name">訂單編號</label>
+									<select class=" form-control custom-select" v-model.number="fId">
+										<option v-for="item in ODetailDTOes" :value="item.fId" :key="item.fId">{{item.fId}}</option>
+									</select>
+								</div>
+								<div class="mb-3">
+									<label for="name">商品編號</label>
+									<select class=" form-control custom-select" v-model.number="fProductId">
+										<option v-for="item in ODetailDTOes" :value="item.fProductId" :key="item.fProductId">{{item.fName}}</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
+									<label for="message">檢舉內容</label>
+									<textarea cols="30" rows="10" class="form-control" v-model="fReportContent"></textarea>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="mb-3">
+							<button type="button" class="btn btn-primary btn-md text-white" @@click="insertReport">送出檢舉</button>
+						</div>
+					</div>
+					<span id="result"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts{
+	<script src="~/Client/js/vue.global.min.js"></script>
+	<script src="~/Client/js/axios.min.js"></script>
+	<script>
+		//var testID = 11;
+		var vueApp = {
+			data() {
+				return {
+					ODetailDTOes: "讀取中",
+					fId: null,
+					fProductId: null,
+					fName: null,
+					fTravelDate: null,
+					fPeriod: null,
+					fPurchaseQuantity: null,
+					fPrice: null,
+					fImagePath: null,
+					fCouponCode: null,
+
+					FOrderDetailId: null,
+					FScore: null,
+					FCreationDate: null,
+					FReviewContent: null,
+					FReportContent: null,
+
+				};
+			},
+			methods: {
+				details: async function () {
+					let _this = this;
+					await axios.get(`/api/OrderDetail/`).then(response => {
+						_this.ODetailDTOes = response.data;
+						var ODetailList = [];
+						for (var i = 0; i < _this.ODetailDTOes.length; i++) {
+							var item = _this.ODetailDTOes[i];
+							ODetailList.push(item);
+						}
+						_this.ODetailDTOes = ODetailList;
+					});
+					_this.$nextTick(function () {
+						if (document.getElementById('_render') !== null) {
+							document.getElementById('_render').remove();
+						}
+						var renderScript = document.createElement('script');
+						renderScript.setAttribute('id', '_render');
+						renderScript.setAttribute('src', '../Client/js/custom.js');
+						document.body.appendChild(renderScript);
+					});
+				},
+				writeReview: function () {
+					$("#insertReviewId").modal("show");
+				},
+				writeReport: function () {
+					$("#insertReportId").modal("show");
+				},
+				insertReview: async function () {
+					let _this = this;
+					var p = {
+						//FId: 0,
+						FOrderDetailId: _this.fId,
+						FScore: _this.fScore,
+						FCreationDate: new Date(),
+						FReviewContent: _this.fReviewContent,
+						FProductId: _this.fProductId,
+						//FOrderDetailId: _this.fOrderDetailId,
+						//FScore: _this.fScore,
+						//FCreationDate: new Date(),
+						//FReviewContent: _this.fReviewContent,
+						//FLastName: "",
+						//FFirstName: "",
+						//FProductId:
+					};
+					console.log(p);
+					await axios.post(`/api/Review`, p).then(response => {
+						alert(response.data);
+					});
+				},
+				insertReport: async function () {
+					let _this = this;
+					var p = {
+						FOrderDetailId: _this.fId,
+						FCreationDate: new Date(),
+						FReportContent: _this.fReportContent,
+						FProductId: _this.fProductId,
+					};
+					console.log(p);
+					await axios.post(`/api/Report`, p).then(response => {
+						alert(response.data);
+					});
+				},
+			},
+			mounted: function () {
+				let _this = this;
+				_this.details();
+			},
+		};
+		var app = Vue.createApp(vueApp).mount("#app");
+	</script>
+}

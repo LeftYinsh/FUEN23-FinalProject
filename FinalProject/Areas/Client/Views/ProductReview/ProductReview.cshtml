@@ -1,0 +1,114 @@
+﻿<div class="section">
+    <div id="review" class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="heading mb-5">評論</h3>
+            </div>
+        </div>
+
+
+
+        <div class="bg-light" v-for="item in ProductReviewDTOes" :key="item.fId">
+            <ul class="comment-list">
+                <li class="comment">
+                    <div class="comment-body">
+                        <h3>{{item.fLastName}} {{item.fFirstName}}</h3>
+                        <div class="meta">{{item.fCreationDate}}</div>
+                        <p>{{item.fReviewContent}}</p>
+                    </div>
+                </li>
+            </ul>
+
+
+           
+
+        </div>
+        <div class="comment-form-wrap pt-5">
+            <h3 class="mb-5">撰寫評論</h3>
+            <form action="#" class="">
+                <div class="mb-3">
+                    <label for="name">訂單編號</label>
+                    <input type="text" class="form-control" v-model.number="fOrderDetailId">
+                </div>
+
+                <div class="mb-3">
+                    <label for="message">分數</label>
+                    <select class="form-control custom-select" v-model.number="fScore">
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="message">評論內容</label>
+                    <textarea cols="30" rows="10" class="form-control" v-model="fReviewContent"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary btn-md text-white" @@click="insert">確定送出</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/Client/js/vue.global.min.js"></script>
+    <script src="~/Client/js/axios.min.js"></script>
+    <script>
+        var testID = 5;
+        var vueApp = {
+            data() {
+                return {
+                    ProductReviewDTOes: [],
+                    fId: null,
+                    fOrderDetailId: null,
+                    fFirstName: null,
+                    fLastName: null,
+                    fScore: null,
+                    fReviewContent: null,
+                    fCreationDate: null,
+                };
+            },
+            methods: {
+                details: function () {
+                    let _this = this;
+                    axios.get(`/api/Review/${testID}`).then(response => {
+                        _this.ProductReviewDTOes = response.data;
+                        var reviewList = [];
+                        for (var i = 0; i < _this.ProductReviewDTOes.length; i++) {
+                            var item = _this.ProductReviewDTOes[i];
+                            reviewList.push(item);
+                        }
+                        _this.ProductReviewDTOes = reviewList;
+                    });
+                },
+                insert: function () {
+                    alert("insert");
+                    let _this = this;
+                    var p = {
+                        FId: 0,
+                        FOrderDetailId: _this.fOrderDetailId,
+                        FScore: _this.fScore,
+                        FCreationDate: new Date(),
+                        FReviewContent: _this.fReviewContent,
+                        FLastName: "",
+                        FFirstName: "",
+                    };
+                    axios.post(`/api/Review`, p).then(response => {
+                        alert(response.data);
+                    });
+                },
+            },
+            mounted: function () {
+                let _this = this;
+                _this.details();
+            },
+        };
+        var app = Vue.createApp(vueApp).mount("#review");
+    </script>
+}

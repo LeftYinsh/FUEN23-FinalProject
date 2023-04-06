@@ -1,0 +1,91 @@
+﻿@model FinalProject.Areas.Server.ViewModels.CCouponViewModel
+
+@{
+    ViewData["Title"] = "新增優惠券";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">
+        新增優惠券
+    </h1>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row ms-2">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="FCode" class="control-label"></label>
+                        <input asp-for="FCode" class="form-control" />
+                        <span asp-validation-for="FCode" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group" id="startTtime">
+                        <label asp-for="FStartDate" class="control-label"></label>
+                        <input asp-for="FStartDate" class="form-control" id="startDate" />
+                        <span asp-validation-for="FStartDate" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group" id="endTime">
+                        <label asp-for="FEndDate" class="control-label"></label>
+                        <input asp-for="FEndDate" class="form-control" id="endDate" />
+                        <span asp-validation-for="FEndDate" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FRatio" class="control-label"></label>
+                        <input asp-for="FRatio" class="form-control" id="rrr" />
+                        <span asp-validation-for="FRatio" class="text-danger"></span>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label asp-for="FAvailableTimes" class="control-label"></label>
+                        <input asp-for="FAvailableTimes" class="form-control" />
+                        <span asp-validation-for="FAvailableTimes" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FUsedTimes" class="control-label"></label>
+                        <input asp-for="FUsedTimes" class="form-control" />
+                        <span asp-validation-for="FUsedTimes" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+                    <div class="form-group" id="submit">
+                        <input type="submit" value="新增" class="btn btn-success"/>
+                        <a asp-action="List" class="btn btn-danger">返回</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        //let startTime = document.getElementById("startTtime");
+        //let endTime = document.getElementById("endTime");
+        let startDate = document.getElementById("startDate");
+        let endDate = document.getElementById("endDate");
+      
+        startDate.addEventListener("change", function () {
+            //console.log(startTime);
+            console.log(startDate);
+            console.log(startDate.value);
+        });
+        endDate.addEventListener("change", function (e) {
+            //console.log(endTime);
+            console.log(endDate);  
+            console.log(endDate.value);
+            if (endDate.value < startDate.value) {
+                alert("使用截止時間不可早於使用開始時間");              
+                endDate.value="";
+            }
+        });
+    </script>
+}

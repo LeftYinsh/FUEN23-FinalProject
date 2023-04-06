@@ -1,0 +1,66 @@
+﻿@model IEnumerable<FinalProject.Models.TProductReview>
+
+@{
+	ViewData["Title"] = "List";
+}
+
+
+
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">評論查看</h1>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+		<tr>
+			<th>
+				序號
+			</th>
+			<th>
+				訂單編號
+			</th>
+			<th>
+				評論內容
+			</th>
+			<th>
+				評分分數
+			</th>
+			<th>
+				評論時間
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			int count = 0;
+			foreach (var item in Model)
+			{
+				count++;
+				<tr>
+					<td>
+						@count
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FOrderDetailId)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FReviewContent)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FScore)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FCreationDate)
+					</td>
+
+				</tr>
+			}
+		}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</main>
+

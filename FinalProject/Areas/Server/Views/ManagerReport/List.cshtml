@@ -1,0 +1,77 @@
+﻿@model IEnumerable<FinalProject.Areas.Server.ViewModels.CManagerReportViewModel>
+
+@{
+    ViewData["Title"] = "檢舉管理";
+}
+
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">
+            檢舉管理
+        </h1>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>
+                            序號
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReportID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductProvider)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReportContent)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreateDateTime)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int count = 0;
+                        foreach (var item in Model)
+                        {
+                            count++;
+                            <tr>
+                                <td>
+                                    @count
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReportID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductProvider)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReportContent)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreateDateTime)
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink("詳細", "Details", new {id=item.ReportID },new { @class="btn btn-secondary"})
+                                    @Html.ActionLink("刪除", "Delete","ManagerReport", new {  id=item.ReportID  },new{onclick = "return confirm('確定刪除?')",Class="btn btn-danger"})
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+

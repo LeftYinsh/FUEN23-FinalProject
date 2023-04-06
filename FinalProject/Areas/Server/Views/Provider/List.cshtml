@@ -1,0 +1,95 @@
+﻿@model IEnumerable<FinalProject.Areas.Server.ViewModels.CProviderViewModel>
+
+@{
+    ViewData["Title"] = "供應商管理";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">
+        供應商管理
+    </h1>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">新增供應商</a>
+    </p>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>
+                        序號
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FCompanyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FOwnerName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FContactName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FContactTel)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FContactMobile)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FContactEmail)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FAddress)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
+                        <tr>
+                            <td>
+                                @count
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FCompanyName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FOwnerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FContactName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FContactTel)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FContactMobile)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FContactEmail)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FAddress)
+                            </td>
+                            <td>
+                                @Html.ActionLink("詳細", "Details", "Provider", new {  id=item.FId } , new {@class="btn btn-secondary"})
+                                @Html.ActionLink("修改", "Edit", "Provider", new {  id=item.FId } , new {@class="btn btn-success"})
+                                @Html.ActionLink("刪除", "Delete", "Provider", new { id = item.FId }, new { onclick = "return confirm('確定要刪除嗎?')" , @class="btn btn-danger"})
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

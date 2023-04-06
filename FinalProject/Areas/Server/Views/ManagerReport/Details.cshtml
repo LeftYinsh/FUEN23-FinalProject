@@ -1,0 +1,125 @@
+﻿@model FinalProject.Areas.Server.ViewModels.CManagerReportViewModel
+
+@{
+    ViewData["Title"] = "檢舉詳細資料";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">
+        檢舉詳細資料
+    </h1>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <div>
+            <dl class="row ms-2">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ReportID)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ReportID)
+                </dd>
+            </dl>
+            <hr />
+            <dl class="row ms-2">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductID)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductID)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductProviderID)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductProviderID)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductProvider)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductProvider)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductProviderTel)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductProviderTel)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductProviderMobile)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductProviderMobile)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductProviderEmail)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductProviderEmail)
+                </dd>
+            </dl>
+            <hr />
+            <dl class="row ms-2">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CustomerID)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CustomerID)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CustomerLastName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CustomerLastName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CustomerFirstName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CustomerFirstName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CustomerTel)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CustomerTel)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CustomerMobile)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CustomerMobile)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CustomerEmail)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CustomerEmail)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ReportContent)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.Raw(Model.ReportContent.Replace(Environment.NewLine, "<br/>"))
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CreateDateTime)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CreateDateTime)
+                </dd>
+            </dl>
+        </div>
+        <hr />
+        <div>
+            <a asp-action="List" class="btn btn-danger">返回</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@model FinalProject.Areas.Server.ViewModels.CCustomerOrderSheetViewModel
+
+@{
+    ViewData["Title"] = "Details_Canceled";
+}
+
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">已取消訂單詳情</h1>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <thead>
+                <div>
+    <dl class="row">        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderLastName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OrderLastName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderFirstName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OrderFirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CouponCode)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CouponCode)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CheckedDate)
+        </dd>        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProviderName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProviderName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="ListCanceled" class="btn btn-danger">返回</a>
+</div>
+        </div>
+    </div>
+</main>

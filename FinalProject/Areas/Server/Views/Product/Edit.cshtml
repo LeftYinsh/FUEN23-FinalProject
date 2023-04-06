@@ -1,0 +1,114 @@
+﻿@model FinalProject.Areas.Server.ViewModels.CProductViewModel
+
+@{
+    ViewData["Title"] = "修改商品資料";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">
+        修改商品資料
+    </h1>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row ms-2">
+            <div class="col-md-4">
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="FId" value="@Model.FId" />
+                    <div class="form-group">
+                        <label asp-for="FName" class="control-label"></label>
+                        <input class="form-control" value="@Model.FName" disabled />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FPeriod" class="control-label"></label>
+                        <input class="form-control" value="@Model.FPeriod" disabled/>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FProvider" class="control-label"></label>
+                        <input class="form-control" value="@Model.FProvider" disabled/>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FCost" class="control-label"></label>
+                        <input asp-for="FCost" class="form-control" />
+                        <span asp-validation-for="FCost" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FPrice" class="control-label"></label>
+                        <input asp-for="FPrice" class="form-control" />
+                        <span asp-validation-for="FPrice" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FStocks" class="control-label"></label>
+                        <input asp-for="FStocks" class="form-control" />
+                        <span asp-validation-for="FStocks" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FDescription" class="control-label"></label>
+                        <textarea asp-for="FDescription" class="form-control" rows="10"></textarea>
+                        <span asp-validation-for="FDescription" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FImagePath" class="control-label"></label>
+                        <input type="file" name="photo" class="form-control"/>
+                        <span asp-validation-for="FImagePath" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FMinParticipants" class="control-label"></label>
+                        <input asp-for="FMinParticipants" class="form-control" />
+                        <span asp-validation-for="FMinParticipants" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FMaxParticipants" class="control-label"></label>
+                        <input asp-for="FMaxParticipants" class="form-control" />
+                        <span asp-validation-for="FMaxParticipants" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FAssemblyPoint" class="control-label"></label>
+                        <input asp-for="FAssemblyPoint" class="form-control" />
+                        <span asp-validation-for="FAssemblyPoint" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FStartDate" class="control-label"></label>
+                        <input asp-for="FStartDate" class="form-control" />
+                        <span asp-validation-for="FStartDate" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FEndDate" class="control-label"></label>
+                        <input asp-for="FEndDate" class="form-control" />
+                        <span asp-validation-for="FEndDate" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="FRemark" class="control-label"></label>
+                        <textarea asp-for="FRemark" class="form-control" rows="10"></textarea>
+                        <span asp-validation-for="FRemark" class="text-danger"></span>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input type="submit" value="儲存" class="btn btn-success" />
+                        <a class="btn btn-danger" asp-action="List">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

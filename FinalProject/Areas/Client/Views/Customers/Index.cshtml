@@ -1,0 +1,280 @@
+﻿@using static FinalProject.Models.CGlobalParameters;
+
+@section Styles
+    {
+    <style>
+        .form-control:hover {
+            background-color: lightgray;
+        }
+
+        .form-control {
+            border-radius: 10px;
+        }
+
+        label {
+            font-weight: bolder;
+        }
+
+    </style>
+}
+
+
+<div class="container" id="customer">
+    <div class="row">
+        <div class="form-row mt-3">
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username" class="name">
+                    姓氏
+                    <small class="text-danger">*</small>
+                </label>
+                <input class="form-control" v-model="customerDTO.fLastName" disabled>
+
+                <small class="error-msg"></small>
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    名字
+                    <small class="text-danger">*</small>
+                </label>
+                <input class="form-control" v-model="customerDTO.fFirstName" disabled>
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    電子郵件(帳號)
+                    <small class="text-danger">*</small>
+                </label>
+                <input type="email" class="form-control" placeholder="請輸入Email" v-model="customerDTO.fEmail" disabled>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    性別
+                    <small class="text-danger">*</small>
+                </label>
+                <select id="select" class="form-control" v-model.number="customerDTO.fGender">
+                    <option value=0>未指定</option>
+                    <option value=1>男性</option>
+                    <option value=2>女性</option>
+                </select>
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    電話號碼
+                    <small class="text-danger">*</small>
+                </label>
+                <input type="tel" class="form-control" v-model="customerDTO.fTel" @@keyup="checkTel">
+                <span id="istel"></span>
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    手機號碼
+                    <small class="text-danger">*</small>
+                </label>
+                <input class="form-control" placeholder="請輸入09開頭" v-model="customerDTO.fMobile" @@keyup="checkMobile">
+                <span id="ismobile"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    密碼
+                    <small class="text-danger">*</small>
+                </label>
+                <input class="form-control" placeholder="4字元以上至少1個數字與大小寫字母" v-model="customerDTO.fPassword" @@keyup="checkPwd">
+                <span id="idsp"></span>
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    生日
+                </label>
+                <input class="form-control" placeholder="請輸入" v-model="customerDTO.fBirthDate" disabled>
+            </div>
+
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="username">
+                    會員點數
+                </label>
+                <input class="form-control" name="username" disabled v-model="customerDTO.fPoint">
+            </div>
+        </div>
+        <div class="d-flex justify-content-start my-3">
+            <small></small>
+            <button id="ck" class="btn btn-primary" @@click="update(customerDTO)">更改</button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    <script src="~/Client/js/vue.global.min.js"></script>
+    <script src="~/Client/js/axios.min.js"></script>
+
+    <script>
+
+
+        var vueApp = {
+            data() {
+                return {
+                    customerDTO: {},
+                };
+            },
+            methods: {
+                checkPwd: function () {
+                    let _this = this;
+                    //console.log(_this.customerDTO.fPassword)
+                    let cusValue = _this.customerDTO.fPassword;
+                    let Len = _this.customerDTO.fPassword.length;
+                    let sp = document.getElementById("idsp");
+                    let ch, flag1 = false, flag2 = false, flag3 = false;
+                    //let re = /^[\!\#\$\%\^\&\*]+$/;
+                    if (cusValue == "") {
+                        sp.innerText = "不可空白";
+                        sp.style.color = "red";
+                        $("#ck").prop("disabled", true);
+                    }
+                    else if (Len > 0 && Len <= 3) {
+                        sp.innerText = "至少4字元以上";
+                        sp.style.color = "red";
+                        $("#ck").prop("disabled", true);
+                    }
+                    else if (Len >= 4) {
+                        for (let i = 0; i < Len; i++) {
+                            ch = cusValue.charAt(i);
+                            if (ch >= "A" && ch <= "Z")
+                                flag1 = true;
+                            else if (ch >= "0" && ch <= "9")
+                                flag2 = true;
+                            //else if (re.test(ch))
+                            //    flag4 = true;
+                            else if (ch >= "a" && ch <= "z")
+                                flag3 = true;
+                            if (flag1 && flag2 && flag3) break;
+                        }
+                        if (flag1 && flag2 && flag3) {
+                            sp.innerText = "";
+                            $("#ck").prop("disabled", false);
+                        }
+                        else {
+                            sp.innerText = "4個字元以上，最少要有1個數字，大寫與小寫字母";
+                            sp.style.color = "red";
+                            $("#ck").prop("disabled", true);
+                        }
+                    }
+
+                },
+                checkTel: function () {
+                    let _this = this;
+                    let telVal = _this.customerDTO.fTel;
+                    let telLen = _this.customerDTO.fTel.length;
+                    let sp = document.getElementById("istel");
+                    //let re = /0[0-9]\\d{7}d?$/;
+                    let ch, ck, flag1 = false, flag2 = false;
+                    if (telLen <= 0) {
+                        sp.innerText = "不可為空白";
+                        sp.style.color = "red";
+                        $("#ck").prop("disabled", true);
+                    }
+                    else if (telLen >= 9 && telLen <= 10) {
+                        for (let i = 0; i < telLen; i++) {
+                            ch = telVal.charAt(i);
+                            ck = telVal.substr(0, 1);
+                            if (ch >= "0" && ch <= "9")
+                                flag1 = true;
+                            if (ck == "0")
+                                flag2 = true;
+                            if (flag1 && flag2) break;
+                        }
+                        if (flag1 && flag2) {
+                            sp.innerText = "";
+                            $("#ck").prop("disabled", false);
+                        }
+                    }
+                    else {
+                        sp.innerText = "需要0開頭的九或十碼";
+                        sp.style.color = "red";
+                        $("#ck").prop("disabled", true);
+                    }
+                },
+                checkMobile: function () {
+                    let _this = this;
+                    let mobileVal = _this.customerDTO.fMobile;
+                    let mobileLen = _this.customerDTO.fMobile.length;
+                    let sp = document.getElementById("ismobile");
+                    let ch, ck, flag1 = false, flag2 = false;
+                    if (mobileLen <= 0) {
+                        sp.innerText = "不可為空白";
+                        sp.style.color = "red";
+                        $("#ck").prop("disabled", true);
+                    }
+                    else if (mobileLen >= 10 && mobileLen < 11) {
+                        for (let i = 0; i < mobileLen; i++) {
+                            ch = mobileVal.charAt(i);
+                            ck = mobileVal.substr(0, 2);
+                            if (ch >= "0" && ch <= "9")
+                                flag1 = true;
+                            if (ck == "09")
+                                flag2 = true;
+                            if (flag1 && flag2) break;
+                        }
+                        if (flag1 && flag2) {
+                            sp.innerText = "";
+                            $("#ck").prop("disabled", false);
+                        }
+                    }
+                    else {
+                        sp.innerText = "需要09開頭的十碼";
+                        sp.style.color = "red";
+                        $("#ck").prop("disabled", true);
+                    }
+                },
+                getData: async function () {
+                    let _this = this;
+                    await axios.get(`/api/Customer/${@FetchCustomerId(this.ViewContext.HttpContext)}`).then(response => {
+                        _this.customerDTO = response.data;
+                    });
+                    _this.$nextTick(function () {
+                        if (document.getElementById('_render') !== null) {
+                            document.getElementById('_render').remove();
+                        }
+                        var renderScript = document.createElement('script');
+                        renderScript.setAttribute('id', '_render');
+                        renderScript.setAttribute('src', '../Client/js/custom.js');
+                        document.body.appendChild(renderScript);
+                    });
+                },
+                update: function (customerDTO) {
+                    //alert("update");
+                    let _this = this;
+                    var p = {
+                        FId: customerDTO.fId,
+                        FLastName: customerDTO.fLastName,
+                        FFirstName: customerDTO.fFirstName,
+                        FGender: customerDTO.fGender,
+                        FTel: customerDTO.fTel,
+                        FMobile: customerDTO.fMobile,
+                        FEmail: customerDTO.fEmail,
+                        FPassword: customerDTO.fPassword,
+                        FBirthDate: customerDTO.fBirthDate,
+                        FPoint: customerDTO.fPoint,
+                    };
+                    axios.put(`/api/Customer/${customerDTO.fId}`, p).then(response => {
+                        alert(response.data);
+                        _this.getData();
+                    });
+                },
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getData();
+            },
+        };
+
+        var app = Vue.createApp(vueApp).mount("#customer");
+    </script>
+
+}
+

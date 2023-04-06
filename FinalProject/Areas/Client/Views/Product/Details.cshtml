@@ -1,0 +1,216 @@
+﻿@using static FinalProject.Models.CGlobalParameters;
+
+@{
+    ViewData["Title"] = "行程詳情";
+}
+@section Styles{
+    .description {
+        white-space: pre-line;
+        text-align: justify;
+    }
+    .pointer {
+         cursor: pointer;
+    }
+}
+<div class="section">
+    <div id="details" class="container">
+        <div class="row">
+            <div class="col-md-8 blog-content pe-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="heading mb-5">{{productDetailDTO.fName}}</h2>
+                    </div>
+                </div>
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <img :src="'/images/' + productDetailDTO.fImagePath" alt="item.fName" class="img-fluid-p">
+                </div>
+                <span class="date lead">行程時段：{{productDetailDTO.fPeriod}}</span>
+                <div class="price lead">NTD$ {{productDetailDTO.fPrice}}</div>
+                <br />
+                <p class="description">{{productDetailDTO.fDescription}}</p>
+                <div class="row justify-content-end">
+                    <div>
+                        <div class="row align-items-center justify-content-end ">
+                            <div class="col-6">
+                                <div class="input-group my-3 bg-light rounded  align-items-center">
+                                    <input type="date" class="form-control col-3 border-0 text-center align-items-center" v-model="fTravelDate">
+                                    <span class="price m-1 lead fw-bold">全票</span>
+                                    <div class="input-group-prepend">
+                                        <span class="badge rounded-pill bg-primary pointer" @@click="minusAmount">-</span>
+                                    </div>
+                                    <input type="text" class="form-control border-0 text-center align-items-center" aria-label="Example text with button addon" aria-describedby="button-addon1" v-model.number="amount">
+                                    <div class="input-group-append">
+                                        <span class="badge rounded-pill bg-primary pointer" @@click="plusAmount">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 price lead fw-bold">
+                                總價：NTD$ {{totalPrice}}
+                            </div>
+                            <div class="col-2">
+                                <input type="submit" value="加入購物車" class="btn btn-primary btn-md text-white" @@click="addToCart" :disabled="(postActive == 1)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-5">
+                    <h3 class="mb-5">評論</h3>
+                    <ul class="comment-list">
+                        <li class="comment">
+                            <div class="comment-body" v-for="(item,index) in reviewDTOes" :key="index">
+                                <h3>{{item.fLastName}}{{item.fFirstName}}</h3>
+                                <div class="meta">{{item.fCreationDate}}</div>
+                                <p>{{item.fReviewContent}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 sidebar">
+                <div class="sidebar-box">
+                    <div class="categories">
+                        <h3 class="text-black">行程資訊</h3>
+                        <li>行程販售時間：{{productDetailDTO.fStartDate}} ~ {{productDetailDTO.fEndDate}}</li>
+                        <li>此旅遊行程由「{{productDetailDTO.fProvider}}」負責</li>
+                        <li>參與人數限制：{{productDetailDTO.fMinParticipants}} ~ {{productDetailDTO.fMaxParticipants}}人</li>
+                    </div>
+                </div>
+                <div class="sidebar-box">
+                    <h3 class="text-black">集合地點</h3>
+                    <p>{{productDetailDTO.fAssemblyPoint}}</p>
+                    <p><a href="#" class="btn btn-primary btn-md text-white">查看地圖</a></p>
+                </div>
+                <div class="sidebar-box">
+                    <h3 class="text-black">注意事項</h3>
+                    <p>{{productDetailDTO.fRemark}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var ProductId = window.location.href.split('Product/')[1];
+        var vueApp = {
+            data() {
+                return {
+                    productDetailDTO: "讀取中",
+                    reviewDTOes: "讀取中",
+                    amount: 1,
+                    fTravelDate: null,
+                    postActive: 0,
+                    nextDay: null,
+                };
+            },
+            methods: {
+                getDatas: async function () {
+                    let _this = this;
+                    let today = new Date();
+                    await axios.get(`/api/Product/${ProductId}`).then(response => {
+                        _this.productDetailDTO = response.data;
+                        if (_this.productDetailDTO.fRemark == null) {
+                            _this.productDetailDTO.fRemark = "無";
+                        }
+                    });
+
+                    await axios.get(`/api/Review/${ProductId}`).then(response => {
+                        _this.reviewDTOes = response.data;
+                        var reviewList = [];
+                        for (var i = 0; i < _this.reviewDTOes.length; i++) {
+                            var item = _this.reviewDTOes[i];
+                            reviewList.push(item);
+                        }
+                        _this.reviewDTOes = reviewList;
+                        if (_this.reviewDTOes.length == 0) {
+                            _this.reviewDTOes = [{fLastName: "暫無評論"}];
+                        }
+                    });
+
+                    _this.$nextTick(function () {
+                        if (document.getElementById('_render') !== null) {
+                            document.getElementById('_render').remove();
+                        }
+                        var renderScript = document.createElement('script');
+                        renderScript.setAttribute('id', '_render');
+                        renderScript.setAttribute('src', '../Client/js/custom.js');
+                        document.body.appendChild(renderScript);
+                    });
+
+                    _this.productDetailDTO.fStartDate = new Date(_this.productDetailDTO.fStartDate).toISOString().split('T')[0];
+                    _this.productDetailDTO.fEndDate = new Date(_this.productDetailDTO.fEndDate).toISOString().split('T')[0];
+                    _this.nextDay = today.setDate(today.getDate() + 1);
+                    _this.fTravelDate = new Date(_this.nextDay).toISOString().split('T')[0];
+                },
+                addToCart: async function () {
+                    let _this = this;
+                    var p = {
+                        FSid: 0,
+                        FCustomerId: @FetchCustomerId(this.ViewContext.HttpContext),
+                        FProductId: ProductId,
+                        FPurchaseQuantity: _this.amount,
+                        FTravelDate: _this.fTravelDate,
+                    };
+                    _this.postActive = 1;
+                    await axios.post(`/api/ShoppingCart`, p).then(response => {
+                        alert(response.data);
+                        _this.postActive = 0;
+                    }).catch(function (error) {
+                        _this.postActive = 0;
+                    });
+                },
+                plusAmount: function () {
+                    let _this = this;
+                    if (_this.amount < 99) {
+                        _this.amount++;
+                    }
+                    return _this.amount;
+                },
+                minusAmount: function () {
+                    let _this = this;
+                    if (_this.amount > 1) {
+                        _this.amount--;
+                    }
+                    return _this.amount;
+                },
+            },
+            computed: {
+                totalPrice: function () {
+                    let _this = this;
+                    return _this.productDetailDTO.fPrice * _this.amount;
+                },
+            },
+            watch: {
+                amount(newValue, oldValue) {
+                    let _this = this;
+                    if (newValue > 99) {
+                        _this.amount = 99;
+                    }
+                    else if (newValue < 1) {
+                        _this.amount = 1;
+                    }
+                },
+                fTravelDate(newDate, oldDate) {
+                    let _this = this;
+                    if (new Date(newDate).getTime() <= new Date().getTime()) {
+                        _this.fTravelDate = new Date(_this.nextDay).toISOString().split('T')[0];
+                        alert(`請選擇 ${_this.fTravelDate} 以後的日期`);
+                    }
+                    else if (new Date(newDate).getTime() > new Date(_this.productDetailDTO.fEndDate).getTime()) {
+                        _this.fTravelDate = new Date(_this.productDetailDTO.fEndDate).toISOString().split('T')[0];
+                        alert(`請選擇 ${_this.fTravelDate} 以前的日期`);
+                    }
+                    else if (new Date(newDate).getTime() < new Date(_this.productDetailDTO.fStartDate).getTime()) {
+                        _this.fTravelDate = new Date(_this.productDetailDTO.fStartDate).toISOString().split('T')[0];
+                        alert(`請選擇 ${_this.fTravelDate} 以後的日期`);
+                    }
+                },
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getDatas();
+            },
+        };
+        var app = Vue.createApp(vueApp).mount("#details");
+    </script>
+}

@@ -1,0 +1,131 @@
+﻿@model FinalProject.Areas.Server.ViewModels.CProductViewModel
+
+@{
+    ViewData["Title"] = "商品詳細資料";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">
+        商品詳細資料
+    </h1>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <div>
+            <dl class="row ms-2">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FId)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FId)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FPeriod)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FPeriod)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FCost)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FCost)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FPrice)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FPrice)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FStocks)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FStocks)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FDescription)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.Raw(Model.FDescription.Replace(Environment.NewLine, "<br/>"))
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FImagePath)
+                </dt>
+                <dd class="col-sm-10">
+                    <img src="~/images/@Model.FImagePath" width="20%">
+                </dd>
+                <dt class="col-sm-2">
+                    參加人數
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FMinParticipants) ~ @Html.DisplayFor(model => model.FMaxParticipants) 人
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FAssemblyPoint)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FAssemblyPoint)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FStartDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FStartDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FEndDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FEndDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FProvider)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FProvider)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FTag)
+                </dt>
+                <dd class="col-sm-10">
+                    @Model.FTag
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FRemark)
+                </dt>
+                <dd class="col-sm-10">
+                    @{
+                        if (Model.FRemark != null)
+                        {
+                            @Html.Raw(Model.FRemark.Replace(Environment.NewLine, "<br/>"))
+                        }
+                    }
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FCreationDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FCreationDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FLastUpdateDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FLastUpdateDate)
+                </dd>
+            </dl>
+        </div>
+        <hr />
+        <div>
+            @Html.ActionLink("修改", "Edit", new { id = Model.FId }, new { Class = "btn btn-success" })
+            <a class="btn btn-danger" asp-action="List">返回</a>
+        </div>
+    </div>
+</div>
